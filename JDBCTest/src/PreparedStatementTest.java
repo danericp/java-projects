@@ -1,7 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-public class JDBCPreparedStatement {
+public class PreparedStatementTest {
 	public static void main(String[] args) {
 		String str_tb = "employi";
 		// SELECT PreparedStatement

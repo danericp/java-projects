@@ -1,7 +1,7 @@
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
-public class JDBCCallableStatement {
+public class CallableStatementTest {
 	public static void main(String[] args) {
 		// SELECT PreparedStatement
 		try {
