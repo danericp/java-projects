@@ -1,3 +1,4 @@
+package app;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,6 +22,7 @@ public class JDBCOracleCRUDMain {
 		final String _CONNECTION = "jdbc:oracle:thin:@localhost:1521:xe";
 		final String _PASSWORD = "player";
 		final String _USERNAME = "system";
+		final String _TABLE = "tb_crud_image";
 		
 		System.out.println(args[0]);
 		
@@ -36,7 +38,7 @@ public class JDBCOracleCRUDMain {
 					System.out.println("DROP TABLE Statement");
 					Connection obj_conn = DriverManager.getConnection(_CONNECTION, _USERNAME, _PASSWORD);
 					Statement obj_st = obj_conn.createStatement();
-					obj_st.executeUpdate("DROP TABLE tb_crud_image");
+					obj_st.executeUpdate("DROP TABLE " + _TABLE);
 					System.out.println("Table dropped.");
 					obj_conn.close();
 				}
@@ -56,7 +58,7 @@ public class JDBCOracleCRUDMain {
 					System.out.println("CREATE TABLE Statement");
 					Connection obj_conn = DriverManager.getConnection(_CONNECTION, _USERNAME, _PASSWORD);
 					Statement obj_st = obj_conn.createStatement();
-					obj_st.executeUpdate("CREATE TABLE tb_crud_image (id int, img_name varchar2(100), img_description varchar2(100), img_type varchar2(10), img_version int, date_created date, date_updated date)");
+					obj_st.executeUpdate("CREATE TABLE " + _TABLE + " (id int, img_name varchar2(100), img_description varchar2(100), img_type varchar2(10), date_created date )");
 					System.out.println("Table created.");
 					obj_conn.close();
 				}
