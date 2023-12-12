@@ -2,6 +2,9 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 
 import org.json.*;
 
@@ -18,7 +21,33 @@ public class JDBCOracleCRUDMain {
 		System.out.println(args[0]);
 		
 		switch (args[0].toUpperCase()) {
+			case _CREATE: {
+				break;
+			}
+			case _DELETE: {
+				break;
+			}
+			case _READ: {
+				break;
+			}
 			case _SETUP: {
+				try {
+					System.out.println("CREATE TABLE Statement");
+					Connection obj_conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "player");
+					Statement obj_st = obj_conn.createStatement();
+					obj_st.executeUpdate("CREATE TABLE crud_image (id int, img_name varchar2(100), img_description varchar2(100), img_type varchar2(10), img_version int, date_created date, date_updated date)");
+					System.out.println("Table created.");
+					obj_conn.close();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+				finally {
+					System.out.println("CREATE TABLE Statement... Complete");
+				}
+				break;
+			}
+			case _UPDATE: {
 				break;
 			}
 			default:
