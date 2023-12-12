@@ -14,9 +14,13 @@ public class JDBCOracleCRUDMain {
 
 		final String _CREATE = "CREATE";
 		final String _DELETE = "DELETE";
+		final String _DROP = "DROP";
 		final String _READ = "READ";
 		final String _SETUP = "SETUP";
 		final String _UPDATE = "UPDATE";
+		final String _CONNECTION = "jdbc:oracle:thin:@localhost:1521:xe";
+		final String _PASSWORD = "player";
+		final String _USERNAME = "system";
 		
 		System.out.println(args[0]);
 		
@@ -27,15 +31,32 @@ public class JDBCOracleCRUDMain {
 			case _DELETE: {
 				break;
 			}
+			case _DROP: {
+				try {
+					System.out.println("DROP TABLE Statement");
+					Connection obj_conn = DriverManager.getConnection(_CONNECTION, _USERNAME, _PASSWORD);
+					Statement obj_st = obj_conn.createStatement();
+					obj_st.executeUpdate("DROP TABLE tb_crud_image");
+					System.out.println("Table dropped.");
+					obj_conn.close();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+				finally {
+					System.out.println("DROP TABLE Statement... Complete");
+				}
+				break;
+			}
 			case _READ: {
 				break;
 			}
 			case _SETUP: {
 				try {
 					System.out.println("CREATE TABLE Statement");
-					Connection obj_conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "player");
+					Connection obj_conn = DriverManager.getConnection(_CONNECTION, _USERNAME, _PASSWORD);
 					Statement obj_st = obj_conn.createStatement();
-					obj_st.executeUpdate("CREATE TABLE crud_image (id int, img_name varchar2(100), img_description varchar2(100), img_type varchar2(10), img_version int, date_created date, date_updated date)");
+					obj_st.executeUpdate("CREATE TABLE tb_crud_image (id int, img_name varchar2(100), img_description varchar2(100), img_type varchar2(10), img_version int, date_created date, date_updated date)");
 					System.out.println("Table created.");
 					obj_conn.close();
 				}
