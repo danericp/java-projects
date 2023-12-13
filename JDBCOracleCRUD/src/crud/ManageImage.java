@@ -1,18 +1,16 @@
 package crud;
 
-import java.awt.image.ImageProducer;
 import java.io.FileInputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import db.DBUtil;
 import obj.ImageObject;
+import obj.Initialization;
 
 public class ManageImage {
 	
@@ -21,18 +19,19 @@ public class ManageImage {
 		List<ImageObject> imageList = new ArrayList<ImageObject>();
 		try {
 			
+			Class.forName(Initialization._DRIVER);
 			Connection conn = DBUtil.getConnection();
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery("");
 			while(rs.next()) {
 				
 				ImageObject image = new ImageObject(
-					rs.getInt("id"),
-					rs.getBlob(0)
-					rs.getString("img_name"),
-					rs.getString("img_description"),
-					rs.getString("img_type"),
-					rs.getDate("date_created")
+					rs.getInt(Initialization._DB_TABLE_COL1_N_ID),
+					rs.getBlob(Initialization._DB_TABLE_COL2_N_CONTENT),
+					rs.getString(Initialization._DB_TABLE_COL3_N_NAME),
+					rs.getString(Initialization._DB_TABLE_COL4_N_DESC),
+					rs.getString(Initialization._DB_TABLE_COL5_N_TYPE),
+					rs.getDate(Initialization._DB_TABLE_COL6_N_CREATED)
 				);
 				imageList.add(image);
 				
@@ -53,21 +52,24 @@ public class ManageImage {
 		ImageObject image = null;
 		try {
 			
+			Class.forName(Initialization._DRIVER);
 			Connection conn = DBUtil.getConnection();
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM tb_crud_image WHERE id = ?");
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + Initialization._DB_TABLE + " WHERE id = ?");
 			ps.setInt(1, imageId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				
 				image = new ImageObject(
-					rs.getInt("id"),
-					rs.getString("img_name"),
-					rs.getString("img_description"),
-					rs.getString("img_type"),
-					rs.getDate("date_created")
+					rs.getInt(Initialization._DB_TABLE_COL1_N_ID),
+					rs.getBlob(Initialization._DB_TABLE_COL2_N_CONTENT),
+					rs.getString(Initialization._DB_TABLE_COL3_N_NAME),
+					rs.getString(Initialization._DB_TABLE_COL4_N_DESC),
+					rs.getString(Initialization._DB_TABLE_COL5_N_TYPE),
+					rs.getDate(Initialization._DB_TABLE_COL6_N_CREATED)
 				);
 
 			}
+			DBUtil.closeConnection(conn);
 			
 		}
 		catch (Exception e) {
@@ -78,18 +80,54 @@ public class ManageImage {
 		return image;
 		
 	}
-	public Integer addImage(ImageObject image) {
+	public Integer addImage(String imageLocation, String imageName, String imageDesc) {
 		
 		Integer status = 0;
 		try {
 			
-			Calendar calendar = Calendar.getInstance();
+			Class.forName(Initialization._DRIVER);
 			Connection conn = DBUtil.getConnection();
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO tb_crud_image VALUES (?, ?, ?, NOW())");
-			FileInputStream obj_fis = new FileInputStream("C:\\Users\\daner\\Downloads\\huh.jpg");
-			ps.setString(1, null);
-			ps.setString(2, null);
-			ps.setString(3, null);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO " + Initialization._DB_TABLE + " VALUES (?, ?, ?, ?, NOW())");
+			FileInputStream obj_fis = new FileInputStream(imageLocation);
+			ps.setBinaryStream(1, obj_fis);
+			ps.setString(2, imageName);
+			ps.setString(3, imageDesc);
+			ps.setString(4, imageName.split(".")[imageName.split(".").length-1]);
+			status = ps.executeUpdate();
+			DBUtil.closeConnection(conn);
+			
+		}
+		catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		return status;
+		
+	}
+public Integer updateImage(String imageLocation, String imageName, String imageDesc, Integer imageId) {
+		
+		Integer status = 0;
+		try {
+			
+			Class.forName(Initialization._DRIVER);
+			Connection conn = DBUtil.getConnection();
+			PreparedStatement ps = conn.prepareStatement(
+					"UPDATE " + Initialization._DB_TABLE + " " +
+					"SET " +
+					Initialization._DB_TABLE_COL2_N_CONTENT + "=?, " +
+					Initialization._DB_TABLE_COL3_N_NAME + "=?, " +
+					Initialization._DB_TABLE_COL4_N_DESC + "=?, " +
+					Initialization._DB_TABLE_COL5_N_TYPE + "=?, " +
+					"WHERE " + Initialization._DB_TABLE_COL1_N_ID + "=?");
+			FileInputStream obj_fis = new FileInputStream(imageLocation);
+			ps.setBinaryStream(1, obj_fis);
+			ps.setString(2, imageName);
+			ps.setString(3, imageDesc);
+			ps.setString(4, imageName.split(".")[imageName.split(".").length-1]);
+			ps.setInt(3, imageId);
+			status = ps.executeUpdate();
+			DBUtil.closeConnection(conn);
 			
 		}
 		catch (Exception e) {

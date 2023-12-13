@@ -2,19 +2,17 @@ package db;
 
 import java.sql.*;
 
+import obj.Initialization;
+
 public class DBUtil {
-	
-	final static String _CONNECTION = "jdbc:oracle:thin:@localhost:1521:xe";
-	final static String _PASSWORD = "player";
-	final static String _USERNAME = "system";
 	
 	public static Connection getConnection() {
 		
 		Connection conn = null;
 		try {
 			
-			Class.forName("");
-			conn = DriverManager.getConnection(_CONNECTION, _USERNAME, _PASSWORD);
+			Class.forName(Initialization._DRIVER);
+			conn = DriverManager.getConnection(Initialization._CONNECTION, Initialization._USERNAME, Initialization._PASSWORD);
 			
 		}
 		catch(Exception e) {

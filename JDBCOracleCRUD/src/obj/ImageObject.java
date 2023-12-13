@@ -15,10 +15,11 @@ public class ImageObject {
 	public ImageObject() {
 	}
 	
-	public ImageObject(Integer imgId, String imgName, String imgDescription, String imgType, Date dateCreated) {
+	public ImageObject(Integer imgId, Blob imgContent, String imgName, String imgDescription, String imgType, Date dateCreated) {
 		
 		super();
 		this.imgId = imgId;
+		this.imgContent = imgContent;
 		this.imgName = imgName;
 		this.imgDescription = imgDescription;
 		this.imgType = imgType;
