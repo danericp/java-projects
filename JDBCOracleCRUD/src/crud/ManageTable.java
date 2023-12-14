@@ -9,7 +9,7 @@ import obj.Initialization;
 
 public class ManageTable {
 	
-	public boolean checkDatabase () {
+	public static boolean checkDatabase () {
 		
 		Connection conn = DBUtil.getConnection();;
 		boolean isExists = false;
@@ -37,7 +37,7 @@ public class ManageTable {
 		return isExists;
 		
 	}
-	public boolean createDatabase() {
+	public static boolean createDatabase() {
 		
 		Connection conn = null;
 		Statement statement = null;
@@ -61,7 +61,7 @@ public class ManageTable {
 		return status;
 		
 	}
-	public boolean dropDatabase() {
+	public static boolean dropDatabase() {
 		
 		Connection conn = null;
 		Statement statement = null;
