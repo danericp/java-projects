@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 public class PreparedStatementTest {
 	public static void main(String[] args) {
 		String str_tb = "employi";
-		// SELECT PreparedStatement
+		// INSERT PreparedStatement
 		try {
 			System.out.println("INSERT PreparedStatement");
 			Connection obj_conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "player");

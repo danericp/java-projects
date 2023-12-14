@@ -1,10 +1,7 @@
 package crud;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 
 import db.DBUtil;
@@ -14,21 +11,25 @@ public class ManageTable {
 	
 	public boolean checkDatabase () {
 		
-		Connection conn = null;
+		Connection conn = DBUtil.getConnection();;
 		boolean isExists = false;
-        ResultSet resultSet = null;
-		try {
+        
+        try {
+        	Statement obj_st = conn.createStatement();
+        	ResultSet obj_rs = obj_st.executeQuery("SELECT null FROM " + Initialization._DB_TABLE + " UNION SELECT 1 FROM dual");
+        	while(obj_rs.next()) {
+        		
+        		isExists = true;
+        		
+        	}
+        	DBUtil.closeConnection(conn);
+        }        
+		catch (java.sql.SQLSyntaxErrorException e) {
 			
-			conn = DBUtil.getConnection();
-			DatabaseMetaData metaData = conn.getMetaData();
-			resultSet = metaData.getTables(null, Initialization._USERNAME.toUpperCase(), Initialization._DB_TABLE, new String[]{"TABLE"});
-			while (resultSet.next()) {
-				isExists = true;
-			}
-			DBUtil.closeConnection(conn);
-
-		}
-		catch (SQLException e) {
+			System.out.println("Table " + Initialization._DB_TABLE + " doesn't exist. Error Code " + e.getErrorCode());
+	        
+		}        
+		catch (Exception e) {
 			
 			e.printStackTrace();
 	        
@@ -36,7 +37,6 @@ public class ManageTable {
 		return isExists;
 		
 	}
-	
 	public boolean createDatabase() {
 		
 		Connection conn = null;
@@ -47,18 +47,44 @@ public class ManageTable {
 			conn = DBUtil.getConnection();
 			statement = conn.createStatement();
 			statement.execute(Initialization._SQL_CREATE_SEQ);
-			status = statement.execute(Initialization._SQL_CREATE);
+			statement.execute(Initialization._SQL_CREATE);
             DBUtil.closeConnection(conn);
+            status = true;
 
-        }
-		catch (SQLSyntaxErrorException e) {
-			
-			e.printStackTrace();
-            
         }
 		catch (Exception e) {
 			
             e.printStackTrace();
+            status = false;
+            
+        }
+		return status;
+		
+	}
+	public boolean dropDatabase() {
+		
+		Connection conn = null;
+		Statement statement = null;
+		boolean status = true;
+		try {
+
+			conn = DBUtil.getConnection();
+			statement = conn.createStatement();
+			statement.execute(Initialization._SQL_DROP);
+			statement.execute(Initialization._SQL_DROP_SEQ);
+            DBUtil.closeConnection(conn);
+            status = true;
+
+        }
+		catch (java.sql.SQLSyntaxErrorException e) {
+			
+			status = false;
+	        
+		} 
+		catch (Exception e) {
+			
+            e.printStackTrace();
+            status = false;
             
         }
 		return status;

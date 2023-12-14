@@ -12,25 +12,37 @@ public class JDBCOracleCRUDMain {
 		switch (args[0].toUpperCase()) {
 		
 			case Initialization._CREATE: {
-				boolean tableExists = table.checkDatabase();
-				boolean tableCreate = true;
-				if (tableExists == false)
-					tableCreate = table.createDatabase();
-				if (tableCreate)
-					System.out.println("Table " + Initialization._DB_TABLE + " has been created.");
-				else
-					System.out.println("Table " + Initialization._DB_TABLE + " has failed to be created. (Error Code: " + tableCreate + ")");
-					
 				break;
 			}
 			case Initialization._READ:
 				break;
-			
 			case Initialization._UPDATE:
 				break;
-			
 			case Initialization._DELETE:
 				break;
+			case Initialization._SETUP: {
+				
+				boolean tableExists = table.checkDatabase();
+				boolean tableCreated = false;
+				if (tableExists == false)
+					tableCreated = table.createDatabase();
+				if (tableCreated)
+					System.out.println("Table " + Initialization._DB_TABLE + " has been created.");
+				else
+					System.out.println("Table " + Initialization._DB_TABLE + " already exist.");
+				break;
+				
+			}
+			case Initialization._DROP: {
+				
+				boolean databaseDropped = table.dropDatabase();
+				if (databaseDropped)
+					System.out.println("Table " + Initialization._DB_TABLE + " has been dropped.");
+				else
+					System.out.println("Table " + Initialization._DB_TABLE + " doesn't exist anymore.");
+				break;
+				
+			}
 			
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + args[0]);
