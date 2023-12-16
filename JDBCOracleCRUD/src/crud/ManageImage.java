@@ -95,6 +95,7 @@ public class ManageImage {
 			ps.setString(4, ManageFile.getFileExtension(imageLocation));
 			status = ps.executeUpdate();
 			DBUtil.closeConnection(conn);
+			System.out.println("Inserted name: " + imageName + ", description: " + imageDesc);
 			
 		}
 		catch (Exception e) {
@@ -118,16 +119,20 @@ public class ManageImage {
 					Initialization._DB_TABLE_COL2_N_CONTENT + "=?, " +
 					Initialization._DB_TABLE_COL3_N_NAME + "=?, " +
 					Initialization._DB_TABLE_COL4_N_DESC + "=?, " +
-					Initialization._DB_TABLE_COL5_N_TYPE + "=?, " +
+					Initialization._DB_TABLE_COL5_N_TYPE + "=? " +
 					"WHERE " + Initialization._DB_TABLE_COL1_N_ID + "=?");
 			FileInputStream obj_fis = new FileInputStream(imageLocation);
 			ps.setBinaryStream(1, obj_fis);
 			ps.setString(2, imageName);
 			ps.setString(3, imageDesc);
-			ps.setString(4, imageName.split(".")[imageName.split(".").length-1]);
-			ps.setInt(3, imageId);
+			ps.setString(4, ManageFile.getFileExtension(imageLocation));
+			ps.setInt(5, imageId);
 			status = ps.executeUpdate();
 			DBUtil.closeConnection(conn);
+			if (status != 0)
+				System.out.println("Updated name: " + imageName + ", description: " + imageDesc);
+			else
+				System.out.println("Update failed for name: " + imageName + ", description: " + imageDesc);
 			
 		}
 		catch (Exception e) {

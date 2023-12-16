@@ -2,18 +2,10 @@ package app;
 
 import obj.Initialization;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Scanner;
-
-import org.json.JSONObject;
-import org.json.JSONTokener;
-import org.json.simple.JSONArray;
-
 import crud.ManageFile;
 import crud.ManageImage;
 import crud.ManageTable;
+import org.json.JSONObject;
 
 public class JDBCOracleCRUDMain {
 
@@ -28,22 +20,12 @@ public class JDBCOracleCRUDMain {
 					
 					try {
 						
-						File file = new File(ManageFile.getFileName(Initialization._CREATE));
-						Scanner scanner = new Scanner(file);
-						StringBuilder jsonContent = new StringBuilder();
-						while (scanner.hasNextLine())
-							jsonContent.append(scanner.nextLine());
-						scanner.close();
-						org.json.JSONArray jsonArray = new org.json.JSONArray(jsonContent.toString());
+						org.json.JSONArray jsonArray = ManageFile.parseFileToJson(Initialization._CREATE);
 						for (int i = 0; i < jsonArray.length(); i++) {
 							
 							JSONObject jsonObject = jsonArray.getJSONObject(i);
-			                String image = jsonObject.getString("image");
-			                String name = jsonObject.getString("name");
-			                String description = jsonObject.getString("description");
-			                System.out.println("FOUND ONE image: " + image + ", name: " + name + ", description: " + description);
 			                ManageImage imageManager = new ManageImage();
-			                imageManager.addImage(image, name, description);
+			                imageManager.addImage(jsonObject.getString("image"), jsonObject.getString("name"), jsonObject.getString("description"));
 							
 						}
 						
@@ -62,10 +44,62 @@ public class JDBCOracleCRUDMain {
 			}
 			case Initialization._READ:
 				break;
-			case Initialization._UPDATE:
+			case Initialization._UPDATE: {
+			
+				if (ManageFile.isFileExist(Initialization._UPDATE)) {
+					
+					try {
+						
+						org.json.JSONArray jsonArray = ManageFile.parseFileToJson(Initialization._UPDATE);
+						for (int i = 0; i < jsonArray.length(); i++) {
+							
+							JSONObject jsonObject = jsonArray.getJSONObject(i);
+			                ManageImage imageManager = new ManageImage();
+			                imageManager.updateImage(jsonObject.getString("image"), jsonObject.getString("name"), jsonObject.getString("description"), jsonObject.getInt("id"));
+							
+						}
+						
+					}
+					catch (Exception e) {
+						
+						e.printStackTrace();
+						
+					}
+					
+				}
+				else
+					System.out.println("Cannot update an entry to " + Initialization._DB_TABLE + ". JSON file doesn't exist.");
 				break;
-			case Initialization._DELETE:
+				
+			}
+			case Initialization._DELETE: {
+				
+				if (ManageFile.isFileExist(Initialization._DELETE)) {
+					
+					try {
+						
+						org.json.JSONArray jsonArray = ManageFile.parseFileToJson(Initialization._DELETE);
+						for (int i = 0; i < jsonArray.length(); i++) {
+							
+							JSONObject jsonObject = jsonArray.getJSONObject(i);
+			                ManageImage imageManager = new ManageImage();
+			                imageManager.deleteImage();
+							
+						}
+						
+					}
+					catch (Exception e) {
+						
+						e.printStackTrace();
+						
+					}
+					
+				}
+				else
+					System.out.println("Cannot delete an entry to " + Initialization._DB_TABLE + ". JSON file doesn't exist.");
 				break;
+				
+			}
 			case Initialization._SETUP: {
 
 				ManageFile.createFile(Initialization._CREATE);

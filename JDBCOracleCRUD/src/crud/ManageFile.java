@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 import obj.Initialization;
 
@@ -88,6 +89,27 @@ public class ManageFile {
 	public static boolean isFileExist (String fileNameUpper) {
 		
 		return (new File(getFileName(fileNameUpper))).exists();
+		
+	}
+	
+	public static org.json.JSONArray parseFileToJson (String fileNameUpper) {
+		
+		StringBuilder jsonContent = new StringBuilder();
+		File file = new File(ManageFile.getFileName(fileNameUpper));
+		try {
+			
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine())
+				jsonContent.append(scanner.nextLine());
+			scanner.close();
+			
+		}
+		catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		return (new org.json.JSONArray(jsonContent.toString()));
 		
 	}
 
