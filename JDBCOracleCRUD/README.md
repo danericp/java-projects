@@ -1,10 +1,11 @@
 ## Actions
 
-* Setup
 * Create
-* Read
+* Read (Report)
 * Update
 * Delete
+* Setup
+* Drop
 
 ## References
 
