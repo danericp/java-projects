@@ -2,3 +2,17 @@
 JDBCTest/.classpath
 JDBCTest/.project
 *.prefs
+JDBCCrud/.classpath
+JDBCCrud/.project
+JDBCOracleCRUD/.classpath
+JDBCOracleCRUD/.project
+JDBCOracleCRUD/config.json
+JDBCOracleCRUD/create.json
+JDBCOracleCRUD/config.json
+*.json
+JDBCOracleCRUD/config.json
+*.class
+*.json
+JDBCOracleCRUD/config.json
+JDBCOracleCRUD/create_org.json
+JDBCOracleCRUD/update.json

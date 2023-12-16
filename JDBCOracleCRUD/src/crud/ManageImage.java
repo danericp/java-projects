@@ -87,12 +87,12 @@ public class ManageImage {
 			
 			Class.forName(Initialization._DRIVER);
 			Connection conn = DBUtil.getConnection();
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO " + Initialization._DB_TABLE + " VALUES (?, ?, ?, ?, NOW())");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO " + Initialization._DB_TABLE + " VALUES (" + Initialization._DB_SEQ + ".nextval, ?, ?, ?, ?, SYSDATE)");
 			FileInputStream obj_fis = new FileInputStream(imageLocation);
 			ps.setBinaryStream(1, obj_fis);
 			ps.setString(2, imageName);
 			ps.setString(3, imageDesc);
-			ps.setString(4, imageName.split(".")[imageName.split(".").length-1]);
+			ps.setString(4, ManageFile.getFileExtension(imageLocation));
 			status = ps.executeUpdate();
 			DBUtil.closeConnection(conn);
 			
@@ -105,7 +105,7 @@ public class ManageImage {
 		return status;
 		
 	}
-public Integer updateImage(String imageLocation, String imageName, String imageDesc, Integer imageId) {
+	public Integer updateImage(String imageLocation, String imageName, String imageDesc, Integer imageId) {
 		
 		Integer status = 0;
 		try {

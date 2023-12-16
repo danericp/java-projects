@@ -3,6 +3,8 @@ package crud;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import obj.Initialization;
 
@@ -10,42 +12,82 @@ public class ManageFile {
 	
 	public static void createFile (String fileNameUpper) {
 		
+		FileWriter writer = null;
+		String fileName = null;
+		String fileContent = null;
 		switch (fileNameUpper) {
 			
 			case Initialization._CREATE: {
 				
-				String fileName = fileNameUpper.toLowerCase() + ".json";
-				try {
-					
-					FileWriter writer = new FileWriter(fileName);
-					writer.write(Initialization._JSON_CREATE);
-					writer.close();
-					System.out.println("File '" + fileName + "' created successfully!");
-					
-				}
-				catch (IOException e) {
-					
-					System.out.println("An error occurred: " + e.getMessage());
-					e.printStackTrace();
-					
-				}
+				fileName = getFileName(Initialization._CREATE);
+				fileContent = Initialization._JSON_CREATE;
 				break;
 				
 			}
+			case Initialization._READ: {
 				
+				fileName = getFileName(Initialization._READ);
+				fileContent = Initialization._JSON_READ;
+				break;
+				
+			}
+			case Initialization._UPDATE: {
+				
+				fileName = getFileName(Initialization._UPDATE);
+				fileContent = Initialization._JSON_UPDATE;
+				break;
+				
+			}
+			case Initialization._DELETE: {
+				
+				fileName = getFileName(Initialization._DELETE);
+				fileContent = Initialization._JSON_DELETE;
+				break;
+				
+			}
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + fileNameUpper);
+			
+		}
+		try {
+			
+			writer = new FileWriter(fileName);
+			writer.write(fileContent);
+			writer.close();
+			System.out.println("File '" + fileName + "' created successfully!");
+			
+		}
+		catch (IOException e) {
+			
+			System.out.println("An error occurred: " + e.getMessage());
+			e.printStackTrace();
+			
 		}
 		
 	}
 	
-	public static void checkFile (String fileNameUpper) {
+	public static String getFileExtension(String path) {
+        Path p = Paths.get(path);
+        String fileExtension = null;
+        if (p != null) {
+            String fileName = p.getFileName().toString();
+            int lastDotIndex = fileName.lastIndexOf('.');
+            if (lastDotIndex > 0 && lastDotIndex < fileName.length() - 1) {
+                fileExtension = fileName.substring(lastDotIndex + 1);
+            }
+        }
+        return fileExtension;
+    }
+	
+	public static String getFileName (String fileNameUpper) {
 		
-		String fileName = fileNameUpper.toLowerCase() + ".json";
-		if ((new File(fileName)).exists() == false)
-			ManageFile.createFile(fileNameUpper);
-		else
-			System.out.println("File '" + fileName + "' exists.");
+		return fileNameUpper.toLowerCase() + ".json";
+		
+	}
+	
+	public static boolean isFileExist (String fileNameUpper) {
+		
+		return (new File(getFileName(fileNameUpper))).exists();
 		
 	}
 

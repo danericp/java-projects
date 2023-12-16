@@ -10,8 +10,11 @@ public class Initialization {
 	public final static String _DB_TABLE_COL4_N_DESC = "img_desc";
 	public final static String _DB_TABLE_COL5_N_TYPE = "img_type";
 	public final static String _DB_TABLE_COL6_N_CREATED = "date_created";
-	
+
 	public final static String _JSON_CREATE = "[\n\t{\"image\": \"\", \"name\": \"\", \"description\": \"\"}\n]";
+	public final static String _JSON_READ = "[\n\t{\"image\": \"\", \"name\": \"\", \"description\": \"\"}\n]";
+	public final static String _JSON_UPDATE = "[\n\t{\"image\": \"\", \"name\": \"\", \"description\": \"\", \"id\": 0}\n]";
+	public final static String _JSON_DELETE = "[\n\t{\"image\": \"\", \"name\": \"\", \"description\": \"\"}\n]";
 	
 	public final static String _CONNECTION = "jdbc:oracle:thin:@localhost:1521:ORCL3";
 	public final static String _DRIVER = "oracle.jdbc.driver.OracleDriver";
