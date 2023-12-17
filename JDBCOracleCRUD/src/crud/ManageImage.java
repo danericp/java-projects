@@ -13,18 +13,18 @@ import obj.ImageObject;
 import obj.Initialization;
 
 public class ManageImage {
-	
+
 	public List<ImageObject> getAllImages() {
-		
-		List<ImageObject> imageList = new ArrayList<ImageObject>();
+
+		List<ImageObject> imageList = new ArrayList<>();
 		try {
-			
+
 			Class.forName(Initialization._DRIVER);
 			Connection conn = DBUtil.getConnection();
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery("");
 			while(rs.next()) {
-				
+
 				ImageObject image = new ImageObject(
 					rs.getInt(Initialization._DB_TABLE_COL1_N_ID),
 					rs.getBlob(Initialization._DB_TABLE_COL2_N_CONTENT),
@@ -34,31 +34,31 @@ public class ManageImage {
 					rs.getDate(Initialization._DB_TABLE_COL6_N_CREATED)
 				);
 				imageList.add(image);
-				
+
 			}
 			DBUtil.closeConnection(conn);
-			
+
 		}
 		catch (Exception e) {
 
 			e.printStackTrace();
-			
+
 		}
 		return imageList;
-		
+
 	}
 	public ImageObject getImageObjectById(Integer imageId) {
-		
+
 		ImageObject image = null;
 		try {
-			
+
 			Class.forName(Initialization._DRIVER);
 			Connection conn = DBUtil.getConnection();
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + Initialization._DB_TABLE + " WHERE id = ?");
 			ps.setInt(1, imageId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				
+
 				image = new ImageObject(
 					rs.getInt(Initialization._DB_TABLE_COL1_N_ID),
 					rs.getBlob(Initialization._DB_TABLE_COL2_N_CONTENT),
@@ -70,21 +70,21 @@ public class ManageImage {
 
 			}
 			DBUtil.closeConnection(conn);
-			
+
 		}
 		catch (Exception e) {
 
 			e.printStackTrace();
-			
+
 		}
 		return image;
-		
+
 	}
 	public Integer addImage(String imageLocation, String imageName, String imageDesc) {
-		
+
 		Integer status = 0;
 		try {
-			
+
 			Class.forName(Initialization._DRIVER);
 			Connection conn = DBUtil.getConnection();
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO " + Initialization._DB_TABLE + " VALUES (" + Initialization._DB_SEQ + ".nextval, ?, ?, ?, ?, SYSDATE)");
@@ -96,21 +96,21 @@ public class ManageImage {
 			status = ps.executeUpdate();
 			DBUtil.closeConnection(conn);
 			System.out.println("Inserted name: " + imageName + ", description: " + imageDesc);
-			
+
 		}
 		catch (Exception e) {
-			
+
 			e.printStackTrace();
-			
+
 		}
 		return status;
-		
+
 	}
 	public Integer updateImage(String imageLocation, String imageName, String imageDesc, Integer imageId) {
-		
+
 		Integer status = 0;
 		try {
-			
+
 			Class.forName(Initialization._DRIVER);
 			Connection conn = DBUtil.getConnection();
 			PreparedStatement ps = conn.prepareStatement(
@@ -133,15 +133,67 @@ public class ManageImage {
 				System.out.println("Updated name: " + imageName + ", description: " + imageDesc);
 			else
 				System.out.println("Update failed for name: " + imageName + ", description: " + imageDesc);
-			
+
 		}
 		catch (Exception e) {
-			
+
 			e.printStackTrace();
-			
+
 		}
 		return status;
-		
+
+	}
+	public Integer deleteImage (Integer imageId) {
+
+		int status = 0;
+		try {
+
+			Class.forName(Initialization._DRIVER);
+			Connection conn = DBUtil.getConnection();
+			PreparedStatement obj_ps = conn.prepareStatement("DELETE FROM " + Initialization._DB_TABLE + " WHERE id = ?");
+			obj_ps.setInt(1, imageId);
+			status += obj_ps.executeUpdate();
+			if (status != 0)
+				System.out.println("ID entry " + imageId + " successfully deleted. ");
+			else
+				System.out.println("ID entry " + imageId + " deletion failed. ");
+			DBUtil.closeConnection(conn);
+
+		}
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return status;
+
+	}
+	public void readImage () {
+
+		ResultSet obj_rs = null;
+		try {
+
+			Class.forName(Initialization._DRIVER);
+			Connection conn = DBUtil.getConnection();
+			Statement obj_st = conn.createStatement();
+			obj_rs = obj_st.executeQuery("SELECT * FROM " + Initialization._DB_TABLE);
+			DBUtil.closeConnection(conn);
+			if (obj_rs.next()) {
+
+				obj_rs.beforeFirst();
+				ManageExcel.generateReport(obj_rs);
+
+			}
+			else
+				System.out.println("No entries found in the database");
+
+		}
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
 	}
 
 }

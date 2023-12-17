@@ -4,19 +4,19 @@ import java.sql.Blob;
 import java.util.Date;
 
 public class ImageObject {
-	
+
 	Integer imgId;
 	Blob imgContent;
 	String imgName;
 	String imgDescription;
 	String imgType;
 	Date dateCreated;
-	
+
 	public ImageObject() {
 	}
-	
+
 	public ImageObject(Integer imgId, Blob imgContent, String imgName, String imgDescription, String imgType, Date dateCreated) {
-		
+
 		super();
 		this.imgId = imgId;
 		this.imgContent = imgContent;
@@ -24,9 +24,9 @@ public class ImageObject {
 		this.imgDescription = imgDescription;
 		this.imgType = imgType;
 		this.dateCreated = dateCreated;
-		
+
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Product [imgId=" + imgId + ", imgName=" + imgName + ", imgDescription=" + imgDescription + ", imgType=" + imgType + ", dateCreated=" + dateCreated + "]";
@@ -35,7 +35,7 @@ public class ImageObject {
 	public Integer getImgId() {
 		return imgId;
 	}
-	
+
 	public Blob getImgContent() {
 		return imgContent;
 	}
@@ -59,7 +59,7 @@ public class ImageObject {
 	public void setImgId(Integer imgId) {
 		this.imgId = imgId;
 	}
-	
+
 	public void setImgContent(Blob imgContent) {
 		this.imgContent = imgContent;
 	}
