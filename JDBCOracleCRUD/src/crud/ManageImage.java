@@ -168,7 +168,7 @@ public class ManageImage {
 		return status;
 
 	}
-	public void readImage () {
+	public ResultSet readImage () {
 
 		ResultSet obj_rs = null;
 		try {
@@ -178,14 +178,6 @@ public class ManageImage {
 			Statement obj_st = conn.createStatement();
 			obj_rs = obj_st.executeQuery("SELECT * FROM " + Initialization._DB_TABLE);
 			DBUtil.closeConnection(conn);
-			if (obj_rs.next()) {
-
-				obj_rs.beforeFirst();
-				ManageExcel.generateReport(obj_rs);
-
-			}
-			else
-				System.out.println("No entries found in the database");
 
 		}
 		catch (Exception e) {
@@ -193,6 +185,7 @@ public class ManageImage {
 			e.printStackTrace();
 
 		}
+		return obj_rs;
 
 	}
 

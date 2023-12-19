@@ -1,7 +1,6 @@
 package app;
 
-import org.json.JSONObject;
-
+import crud.ManageExcel;
 import crud.ManageFile;
 import crud.ManageImage;
 import crud.ManageTable;
@@ -23,7 +22,7 @@ public class JDBCOracleCRUDMain {
 						org.json.JSONArray jsonArray = ManageFile.parseFileToJson(Initialization._CREATE);
 						for (int i = 0; i < jsonArray.length(); i++) {
 
-							JSONObject jsonObject = jsonArray.getJSONObject(i);
+							org.json.JSONObject jsonObject = jsonArray.getJSONObject(i);
 			                ManageImage imageManager = new ManageImage();
 			                imageManager.addImage(jsonObject.getString("image"), jsonObject.getString("name"), jsonObject.getString("description"));
 
@@ -42,8 +41,14 @@ public class JDBCOracleCRUDMain {
 				break;
 
 			}
-			case Initialization._READ:
+			case Initialization._READ: {
+
+				ManageImage imageManager = new ManageImage();
+				System.out.println("ty45");
+				ManageExcel.generateReport(imageManager.readImage());
 				break;
+
+			}
 			case Initialization._UPDATE: {
 
 				if (ManageFile.isFileExist(Initialization._UPDATE)) {
@@ -53,7 +58,7 @@ public class JDBCOracleCRUDMain {
 						org.json.JSONArray jsonArray = ManageFile.parseFileToJson(Initialization._UPDATE);
 						for (int i = 0; i < jsonArray.length(); i++) {
 
-							JSONObject jsonObject = jsonArray.getJSONObject(i);
+							org.json.JSONObject jsonObject = jsonArray.getJSONObject(i);
 			                ManageImage imageManager = new ManageImage();
 			                imageManager.updateImage(jsonObject.getString("image"), jsonObject.getString("name"), jsonObject.getString("description"), jsonObject.getInt("id"));
 
@@ -81,7 +86,7 @@ public class JDBCOracleCRUDMain {
 						org.json.JSONArray jsonArray = ManageFile.parseFileToJson(Initialization._DELETE);
 						for (int i = 0; i < jsonArray.length(); i++) {
 
-							JSONObject jsonObject = jsonArray.getJSONObject(i);
+							org.json.JSONObject jsonObject = jsonArray.getJSONObject(i);
 			                ManageImage imageManager = new ManageImage();
 			                imageManager.deleteImage(jsonObject.getInt("id"));
 
